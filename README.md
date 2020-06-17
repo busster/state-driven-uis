@@ -64,7 +64,7 @@ How accurately does our component represent these different scenarios? Well it t
 
 *This is because all of the business logic is contained within our single event handler.*
 
-This is an issue because as the requirements for the feature get more complex, so will the logic of the handler. This also means that the possible states the handler must keep track of also increases. This makes enhancement much more difficult as any modification opens the handler up to regression. It also means that the likelyhood of implementation bugs existing goes up! Even testing becomes more tricky because any action has so many different results!
+This is an issue because as the requirements for the feature get more complex, so will the logic of the handler. This also means that the possible states the handler must keep track of also increases. This makes enhancement much more difficult as any modification opens the handler up to regression. It also means that the likelihood of implementation bugs existing goes up! Even testing becomes more tricky because any action has so many different results!
 
 From a coding perspective this implementation has another issue. The business logic is entagled with the rendering logic. What should be displayed is mixed with how to display it. This means that any change to business logic of what to display in the app has the potential to change the actual display of those things. This is an issue as some simple change could totally break the page visual! Also you are locking yourself into some specific UI implementation, some framework, unless you want to rewrite all of the business logic in a new one. Too bad if you chose AngularJS... 😛 A better implementation would be to separate the logic of what to display from how.
 

@@ -8,8 +8,6 @@ What can we do?
 
 Enter State Driven UIs!
 
-To run the projects, just copy this directory somewhere and open the html files in some browser.
-
 
 ## Benefits
 
@@ -22,6 +20,9 @@ To run the projects, just copy this directory somewhere and open the html files 
 
 
 # Example:
+
+To see the examples just copy this directory somewhere and open the html files in some browser.
+
 Let's compare some different feature development implmentations to understand what State Driven UIs can solve.
 
 Let's say that you are developing a feature to search for and display images of dogs. You get a design from the UX person which has a simple button to initiate the search, and then displays a grid of dog images. Simple enough right?

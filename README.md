@@ -50,7 +50,15 @@ These are just some immediate concerns, but there are likely many more to consid
 
 Now let's analyze our finished product.
 
-What are we really trying to represent here. Our app has 4 possible scenarios. First, we the user has not tried to load anything. Second, the user has clicked the button and is now waiting for the photos to load. Third, the fetch was successful and the user can view the photos. Fourth, the fetch was unsuccessful and the user can retry and is alerted that there was something wrong.
+What are we really trying to represent here. Our app has 4 possible scenarios. 
+
+First, the user has not tried to load anything. 
+
+Second, the user has clicked the button and is now waiting for the photos to load. 
+
+Third, the fetch was successful and the user can view the photos. 
+
+Fourth, the fetch was unsuccessful and the user can retry and is alerted that there was something wrong.
 
 How accurately does our component represent these different scenarios? Well it turns out with this implementation it's possible for our component to be in the error and fetching state at the same time. Even the success and error state at the same time! In fact there are 8 different combinations that this component can exist in, which seems like A LOT for such a simple feature. 
 
@@ -58,7 +66,7 @@ How accurately does our component represent these different scenarios? Well it t
 
 This is an issue because as the requirements for the feature get more complex, so will the logic of the handler. This also means that the possible states the handler must keep track of also increases. This makes enhancement much more difficult as any modification opens the handler up to regression. It also means that the likelyhood of implementation bugs existing goes up! Even testing becomes more tricky because any action has so many different results!
 
-From a coding perspective this implementation has another issue. The business logic is entagled with the rendering logic. What should be displayed is mixed with how to display it. These means that you are locking yourself in to some specific UI framework unless you want to rewrite the business logic in a new one. A better implementation would be to separate the logic of what to display from how.
+From a coding perspective this implementation has another issue. The business logic is entagled with the rendering logic. What should be displayed is mixed with how to display it. This means that any change to business logic of what to display in the app has the potential to change the actual display of those things. This is an issue as some simple change could totally break the page visual! Also you are locking yourself into some specific UI implementation, some framework, unless you want to rewrite all of the business logic in a new one. Too bad if you chose AngularJS... 😛 A better implementation would be to separate the logic of what to display from how.
 
 TLDR on this implementation. It focuses on the EVENT. Inside that event, we check some state to understand what we should do. If there are issues, we just add more conditions to that event until we've covered every edge case.
 
@@ -72,7 +80,6 @@ So let's try to refactor this feature in a stateful approach!
 Since we know exactly what states our application can exist in, let's code for those first and consider the events second!
 
 ```
-  states
     idle
     fetching
     success
@@ -85,9 +92,9 @@ So why is this better?
 
 First we have named states. We do not need to maintain a complicated list of boolean combinations to understand what state the feature is in. This makes it much easier to identify the relevant code!
 
-Second we know exactly what can happen on each state. Remeber above when we were considering all the edge cases the app could exist in and we identified 8 possibilities? We had to consider what would happen in an action under each given one. Well here we know we have exactly 4, and we also define exactly what happens for an action on each. This means that we can say with confidence what code will execute, and what the result will be for any given action *even if it is the same action! (Event handler calls the same thing no matter what)*. Additionally, because each state is isolated, you don't even have to think about the other ones when you are designing one.
+Second we know exactly what can happen on each state. Remember above when we were considering all the edge cases the app could exist in and we identified 8 possibilities? In the event handler we had to consider what would happen in an action under each given one. Well here we know we have exactly 4, and we also define exactly what happens for an action on each. This means that we can say with confidence what code will execute, and what the result will be for any given action *even if it is the same action! (Event handler calls the same thing no matter what)*. Additionally, because each state is isolated, you don't even have to think about the other states when you are designing a new one or editing an existing one. This makes development much easier!
 
-Third we have a proper seperation of concerns. This allows our render logic to be more declarative and deal only with the rendering. Look at the simplicity of the button text in this implementation in comparison to the previous. Plus, if we wanted to swap in a new framework, or create a more native (React Native?) version of this app, we can still use that same business logic no problem! All we need to do is make the render functions in the new framework.
+Third we have a proper seperation of concerns. This allows our render logic to be more declarative and deal only with the rendering. Look at the simplicity of the button text in this implementation in comparison to the previous. *I'm sure we've all seen some pretty wacky ternaries!* Plus, if we wanted to swap in a new framework, or create a more native (React Native?) version of this app, we can still use that same business logic no problem! All we need to do is make the render functions in the new framework.
 
 Fourth the test cases practically write themselves. What are all the given scenarios we should look at? Well, what are all the given states and actions listed for them? That's it. The app can't exist in any other one! This means that we don't need to be as concerned with the edge cases as before. We don't need to ask what if questions, we can just look at the code and know what will happen. 
 
@@ -98,4 +105,4 @@ Sixth this makes iteration much faster. Considering all the points made previous
 
 # Final Thoughts
 
-Here we illustrated a specific state management implementation of a feature and the benefits we might gleam from using this pattern. The point is not to say that [XState](https://xstate.js.org/docs/) makes your code better, but rather this way of thinking does. Instead of thinking of the state as a side effect of actions that occur within your UI, you should consider it as the starting point. This puts you on offense when it comes to coding out a feature as opposed to defense. You don't need a ton of case statements within some handler to dictate the app flow, but instead can define the relevant action flows right on the state.
+Here we illustrated a specific state management implementation of a feature and the benefits we might gleam from using this pattern. The point is not to say that [XState](https://xstate.js.org/docs/) makes your code better, but rather this way of thinking does. Instead of thinking of the state as a side effect of actions that occur within your UI, you should consider it as the starting point. This puts you on offense when it comes to coding out a feature as opposed to on defense. You don't need a ton of case statements within some handler to dictate the app flow or be at the mercy to insane user flow possibilities, but instead can define the desired user flows and relevant actions right on the state. This makes your code more declartive, readable, predictable, and open for modification.

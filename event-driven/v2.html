@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="../css.css">
+</head>
+<body>
+  <div id="app">
+    <div v-if="success" class="search-results">
+      <img class="search-result" v-for="photo in photos" :src="photo.src.tiny">
+    </div>
+    <div v-if="error">
+      There was an issue fetching your dogs
+    </div>
+    <button @click="fetchPhotos" :disabled="fetching">
+      {{
+        fetching ? 
+          'fetching...' : 
+          error ? 
+            'Retry' : 
+            'Fetch Dogs'
+      }}
+    </button>
+  </div>
+
+  <script src="../fake-request.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: () => ({
+        success: false,
+        error: false,
+        fetching: false,
+        photos: []
+      }),
+      methods: {
+        fetchPhotos () {
+          if (this.fetching) return
+
+          this.fetching = true
+
+          getPhotos()
+            .then(response => {
+              this.success = true
+              this.photos = response.photos
+            })
+            .catch((ex) => {
+              this.error = true
+            })
+            .finally(() => {
+              this.fetching = false
+            })
+        }
+      }
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" type="text/css" href="../css.css">
+</head>
+<body>
+  <div id="app">
+    <div v-if="state.matches('success')" class="search-results">
+      <img class="search-result" v-for="photo in photos" :src="photo.src.tiny">
+    </div>
+    <div v-if="state.matches('error')">
+      There was an issue fetching your dogs
+    </div>
+    <button @click="fetchPhotos">{{ actionText }}</button>
+  </div>
+
+  <script src="../fake-request.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/xstate@4/dist/xstate.js"></script>
+  <script>
+    const { Machine, assign, interpret } = XState
+
+    const service = interpret(
+      Machine({
+        id: 'photo-fetcher',
+        initial: 'idle',
+        context: {
+          photos: []
+        },
+        states: {
+          idle: {
+            on: {
+              FETCH: 'fetching'
+            }
+          },
+          fetching: {
+            invoke: {
+              src: getPhotos,
+              onDone: {
+                target: 'success',
+                actions: assign({
+                  photos: (context, event) =>  event.data.photos
+                })
+              },
+              onError: 'error'
+            }
+          },
+          success: {
+            on: {
+              FETCH: 'fetching'
+            }
+          },
+          error: {
+            on: {
+              FETCH: 'fetching'
+            }
+          }
+        }
+      })
+    )
+
+    new Vue({
+      el: '#app',
+      data: () => ({
+        service,
+        state: service.initialState
+      }),
+      mounted () {
+        service
+          .onTransition(state => this.state = state)
+          .start()
+      },
+      computed: {
+        photos () {
+          return this.state.context.photos
+        },
+        actionText () {
+            return {
+                idle: 'Fetch Dogs',
+                fetching: 'Fetching...',
+                error: 'Retry',
+                success: 'Fetch More Dogs'
+            }[this.state.value]
+        }
+      },
+      methods: {
+        fetchPhotos () {
+          this.service.send('FETCH')
+        }
+      }
+    })
+  </script>
+</body>
+</html>

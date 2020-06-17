@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="../css.css">
+</head>
+<body>
+  <div id="app">
+    <div class="search-results">
+      <img class="search-result" v-for="photo in photos" :src="photo.src.tiny">
+    </div>
+    <button @click="fetchPhotos">Fetch Dogs</button>
+  </div>
+
+  <script src="../fake-request.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: () => ({
+        photos: []
+      }),
+      methods: {
+        fetchPhotos () {
+          getPhotos()
+            .then(response => {
+              this.photos = response.photos
+            })
+        }
+      }
+    })
+  </script>
+</body>
+</html>

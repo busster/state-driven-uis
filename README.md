@@ -8,6 +8,8 @@ What can we do?
 
 Enter State Driven UIs!
 
+To run the projects, just copy this directory somewhere and open the html files in some browser.
+
 
 ## Benefits
 

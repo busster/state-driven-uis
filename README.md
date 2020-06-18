@@ -124,4 +124,27 @@ T - transition map S x A -> S
 
 F - set of final states (possibly empty)
 
+![State Machine model](./state-machine-model.png)
+
+You can easily define a simple one like so:
+```js
+class StateMachine {
+  constructor (A, S, S0, T, F) {
+    this.A = A
+    this.S = S
+    this.S0 = S0
+    this.T = T
+    this.F = F
+  }
+
+  get initialState () {
+    return this.S0
+  }
+
+  transition (state, input) {
+    return this.T[state][input] || state
+  }
+}
+```
+
 [Example](./simple-state-machine/index.html)

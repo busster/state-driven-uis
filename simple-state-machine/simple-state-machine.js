@@ -7,6 +7,7 @@ console.log('%c♥ State Machines ♥', 'color: #f2a3b3')
 // T - transition map S x A -> S
 // F - set of final states (possibly empty)
 
+// This is just a quick example that can be fleshed out more based on need!
 class StateMachine {
   constructor (A, S, S0, T, F) {
     this.A = A

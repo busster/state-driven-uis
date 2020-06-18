@@ -105,4 +105,23 @@ Sixth this makes iteration much faster. Considering all the points made previous
 
 # Final Thoughts
 
-Here we illustrated a specific state management implementation of a feature and the benefits we might gleam from using this pattern. The point is not to say that [XState](https://xstate.js.org/docs/) makes your code better, but rather this way of thinking does. Instead of thinking of the state as a side effect of actions that occur within your UI, you should consider it as the starting point. This puts you on offense when it comes to coding out a feature as opposed to on defense. You don't need a ton of case statements within some handler to dictate the app flow or be at the mercy to insane user flow possibilities, but instead can define the desired user flows and relevant actions right on the state. This makes your code more declartive, readable, predictable, and open for modification.
+Here we illustrated a specific state management implementation of a feature and the benefits we might gleam from using this pattern. The point is not to say that [XState](https://xstate.js.org/docs/) makes your code better, but rather this way of thinking does. Instead of thinking of the state as a side effect of actions that occur within your UI, you should consider it as the starting point. This puts you on offense when it comes to coding out a feature as opposed to on defense. You don't need a ton of case statements within some handler to dictate the app flow or be at the mercy to insane user flow possibilities, but instead can define the desired user flows and relevant actions right on the state. This makes your code more declarative, readable, predictable, and open for modification.
+
+
+# What Next?
+
+Ok so let's say you want to try this out, but you don't want to learn a whole new library or can't bring it into an existing project. No problem! The concept is relatively simple. A deterministic finite state machine is just a quintuple
+
+(A, S, S0, T, F) where:
+
+A - is the input alphabet (finite, non empty)
+
+S - is a set of states (finite, non empty)
+
+S0 - initial state (element of S)
+
+T - transition map S x A -> S
+
+F - set of final states (possibly empty)
+
+[Example](./simple-state-machine/index.html)

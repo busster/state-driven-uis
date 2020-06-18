@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>Some sample code of my attempt to translate the maths into JS</h1>
+  <img style="max-width: 1000px;" src="../state-machine-model.png">
+  <p>Pop open that console to see it run!</p>
+  <pre>
+    CODE:
+    <code>
+      class StateMachine {
+        constructor (A, S, S0, T, F) {
+          this.A = A
+          this.S = S
+          this.S0 = S0
+          this.T = T
+          this.F = F
+        }
+      
+        get initialState () {
+          return this.S0
+        }
+      
+        transition (state, input) {
+          return this.T[state][input] || state
+        }
+      }
+      
+      // INPUT ALPHABET
+      const A = {
+        FETCH: Symbol('FETCH'),
+        RESOLVE: Symbol('RESOLVE'),
+        REJECT: Symbol('REJECT')
+      }
+      // SET OF FINITE STATES
+      const S = {
+        idle: Symbol('idle'),
+        fetching: Symbol('fetching'),
+        success: Symbol('success'),
+        error: Symbol('error')
+      }
+      // INITIAL STATE
+      const S0 = S.idle
+      // TRANSITION MAP
+      const T = {
+        // S
+        [S.idle]: {
+          // A -> S
+          [A.FETCH]: S.fetching
+        },
+        [S.fetching]: {
+          [A.RESOLVE]: S.success,
+          [A.REJECT]: S.error
+        },
+        [S.success]: {
+          [A.FETCH]: S.fetching
+        },
+        [S.error]: {
+          [A.FETCH]: S.fetching
+        }
+      }
+      // FINAL STATES
+      const F = {}
+      
+      const stateMachine = new StateMachine(A, S, S0, T, F)
+      let state = stateMachine.initialState
+      state = stateMachine.transition(state, A.FETCH)
+    </code>
+  </pre>
+
+  <script src="./simple-state-machine.js"></script>
+</body>
+</html>

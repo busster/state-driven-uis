@@ -2,6 +2,8 @@
 
 # Intro
 
+[Inspiration](https://slides.com/davidkhourshid/finite-state-machines)
+
 When we are building out UIs the biggest area of issue is our users doing totally unexpected things (Edge Cases). We try to solve for this with QA doing their best to break it; putting in letters where there should be numbers, clicking on things and typing in boxes like they're trying to execute a special move in Mortal Kombat. And why is this such an issue? Because it is impossible to forsee all of the possible states the app can be in, and users some how find a way to arrive at the most obscure ones. And, if we don't know about these states we can't code for them! 
 
 What can we do?
